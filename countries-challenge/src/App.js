@@ -8,21 +8,32 @@ import SearchBar from './SearchBar';
 import RegionSelect from './RegionSelect';
 
 function App() {
-  const [countriesArray, setCountriesArray] = useState(countriesAll);
-  function updateSearch(result) {
-    setCountriesArray(result)
+  const [searchInput, setSearchInput] = useState("");
+  // const [countriesArray, setCountriesArray] = useState(countriesAll);
+  // function updateSearch(result) {
+  //   setCountriesArray(result)
+  // }
+
+  function handleSearchInput(event) {
+    setSearchInput(event.target.value); 
+    // updateSearch(countryObject);
+}
+
+  const [regionsOption, setRegionsOption] = useState("");
+  function handleRegionEvent(event) {
+    setRegionsOption(event.target.value)
   }
-  const [regionsOption, setRegionsOption] = useState(countriesAll);
-  function selectRegion(result) {
-    setRegionsOption(result)
-  }
+
+  let countryObject = countriesAll.filter(country => country.name.toLowerCase().includes(    searchInput.toLowerCase()  )
+  || country.capital.toLowerCase().includes(    searchInput.toLowerCase()  ));
+  let regionObject = countryObject.filter(country => country.region.toLowerCase().includes(regionsOption.toLowerCase()))
   return (
     <div className="App">
       <Header />
-      <SearchBar updateSearch = {updateSearch}/>
-      <RegionSelect selectRegion = {handleRegionSelect}/>
+      <SearchBar handleSearchInput = {handleSearchInput} searchInput = {searchInput}/>
+      <RegionSelect handleRegionEvent = {handleRegionEvent} />
       <div className = 'cards-container'>
-      {countriesArray.map((country) =>
+      {regionObject.map((country) =>
         <CountriesList country = {country} key = {country.alpha2Code}/>
       )}
       </div>
